@@ -1,0 +1,41 @@
+body {
+    max-width: 100%;
+    max-height: 80%;
+}
+
+.tag {
+    margin-top: 15px;
+color:grey
+}
+
+.border { 
+position: absolute;
+width: 50%;
+height: 380px;
+left: 25%;
+top: 30%;
+
+background: #FFFBFB;
+border-radius: 15px;
+}
+
+.txt {
+position: absolute;
+
+width: 355px;
+height: 324px;
+left: 35px;
+top: 241px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 20px;
+line-height: 16px;
+/* or 80% */
+
+display: flex;
+align-items: flex-end;
+
+color: #000000;
+}

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="index.html">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/Anfahrt.css">
+</head>
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+<link  href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
+rel="stylesheet"/>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.js"></script>
+<link
+  rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.css"
+  type="text/css"
+/>
+
+<!-- Turf & Polyline -->
+<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mapbox-polyline/1.1.1/polyline.js"></script>
+
+<body>
+    <div>
+    <nav>
+        <input type="image" src="/img/MD21.png" width="100px" height="85px" border="0">
+        <ul>
+            <li><a href="/index.html">Home</a>
+                <ul>
+                    <li><a href="/index.html">Startseite</a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#">Galerie</a>
+                <ul>
+                    <li><a href="md21.html">Austellung</a></li>
+                    <li><a href="#">Sammlung</a></li>
+                    <li><a href="#">Objekte</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Info</a>
+                <ul>
+                    <li><a href="/Eintritspreise.html">Eintritspreise</a></li>
+                    <li><a href="/öffnungszeiten.html">Öffnungszeiten</a></li>
+                    <li><a href="/Anfahrt.html">Anfahrt</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    </div>
+
+    <div id="map"></div>
+<div class="sidebar">
+<div class="heading">
+<h1>Routes</h1>
+</div>
+<div id="reports" class="reports"></div>
+</div>
+          <script>
+     mapboxgl.accessToken = 'pk.eyJ1Ijoid2Jhbml0cyIsImEiOiJja3cxZGRzNmYwMDd3MnZtcDJoYnNqa2RmIn0.ol5ygxuzloX5OMWdx7o0VQ';
+  const map = new mapboxgl.Map({
+    container: "map", // container id
+    style: "mapbox://styles/wbanits/ckwws1eb92dm315oe56mc3vfm", // stylesheet location
+    center: [-115.351043, 51.088856], // starting position
+    zoom: 13.75, // starting zoom
+  });
+
+      const directions = new MapboxDirections({
+        accessToken: mapboxgl.accessToken,
+        unit: 'metric',
+        profile: 'mapbox/driving',
+        alternatives: 'false',
+        geometries: 'geojson'
+      });
+
+      map.scrollZoom.enable();
+      map.addControl(directions, 'top-right');
+
+      const clearances = {
+        'type': 'FeatureCollection',
+        'features': [
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [-84.47426, 38.06673]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [-115.570735, 51.178420]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [-115.595056, 51.200119]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [ -115.762959, 51.115296]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [-116.162675, 51.441723]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [-116.215298, 51.417204]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [-116.178643, 51.426632]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [-115.381567, 51.088565]
+            },
+            'properties': {
+              'clearance': "9' 0"
+            }
+          }
+        ]
+      };
+      
+      const obstacle = turf.buffer(clearances, 0.1, { units: 'kilometers' }); 
+
+      map.on('load', () => {
+        map.addLayer({
+          id: 'clearances',
+          type: 'fill',
+          source: {
+            type: 'geojson',
+            data: obstacle
+          },
+          layout: {},
+          paint: {
+            'fill-color': '#f03b20',
+            'fill-opacity': 0.5,
+            'fill-outline-color': '#f03b20'
+          }
+        });
+
+        // Create sources and layers for the returned routes.
+        // There will be a maximum of 3 results from the Directions API.
+        // We use a loop to create the sources and layers.
+        for (let i = 0; i < 3; i++) {
+          map.addSource(`route${i}`, {
+            type: 'geojson',
+            data: {
+              type: 'Feature'
+            }
+          });
+
+          map.addLayer({
+            id: `route${i}`,
+            type: 'line',
+            source: `route${i}`,
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            paint: {
+              'line-color': '#cccccc',
+              'line-opacity': 0.5,
+              'line-width': 13,
+              'line-blur': 0.5
+            }
+          });
+        }
+      });
+
+      directions.on('route', (event) => {
+        const reports = document.getElementById('reports');
+        reports.innerHTML = '';
+        const report = reports.appendChild(document.createElement('div'));
+        // Add IDs to the routes
+        const routes = event.route.map((route, index) => ({
+          ...route,
+          id: index
+        }));
+
+        // Hide all routes by setting the opacity to zero.
+        for (let i = 0; i < 3; i++) {
+          map.setLayoutProperty(`route${i}`, 'visibility', 'none');
+        }
+
+        for (const route of routes) {
+          // Make each route visible, by setting the opacity to 50%.
+          map.setLayoutProperty(`route${route.id}`, 'visibility', 'visible');
+
+          // Get GeoJSON LineString feature of route
+          const routeLine = polyline.toGeoJSON(route.geometry);
+
+          // Update the data for the route, updating the visual.
+          map.getSource(`route${route.id}`).setData(routeLine);
+
+          const isClear = turf.booleanDisjoint(obstacle, routeLine) === true;
+
+          const collision = isClear ? 'is good!' : 'is bad.';
+          const emoji = isClear ? '✔️' : '⚠️';
+          const detail = isClear ? 'does not go' : 'goes';
+          report.className = isClear ? 'item' : 'item warning';
+
+          if (isClear) {
+            map.setPaintProperty(`route${route.id}`, 'line-color', '#74c476');
+          } else {
+            map.setPaintProperty(`route${route.id}`, 'line-color', '#de2d26');
+          }
+
+          // Add a new report section to the sidebar.
+          // Assign a unique `id` to the report.
+          report.id = `report-${route.id}`;
+
+          // Add the response to the individual report created above.
+          const heading = report.appendChild(document.createElement('h3'));
+
+          // Set the class type based on clear value.
+          heading.className = isClear ? 'title' : 'warning';
+          heading.innerHTML = `${emoji} Route ${route.id + 1} ${collision}`;
+
+          // Add details to the individual report.
+          const details = report.appendChild(document.createElement('div'));
+          details.innerHTML = `This route ${detail} through an avoidance area.`;
+          report.appendChild(document.createElement('hr'));
+        }
+      });
+    </script>
+</body>
+</html>

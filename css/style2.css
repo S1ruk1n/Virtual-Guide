@@ -1,0 +1,182 @@
+.outer {
+    margin-top: 5%;
+    height: 60%;
+  }
+  
+  .outer {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) 96px;
+    grid-template-rows: minmax(0, 1fr);
+    overflow: hidden;
+    margin-left: 25%;
+    width: 50%;
+    background-color: #18181b;
+  }
+  /* slide show erstellen */
+
+  .outer section {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    grid-row: 1 / 1;
+    grid-column: 1 / span 3;
+    transition: transform 0.5s, opacity 0.5s;
+    transform: translateX(var(--offscreen, 100%));
+  }
+  
+  .outer section:nth-child(1) {
+    background: url("/img/LOUVRE.jpg"), #f9faf8;
+    background-size: 100% 100%;
+    --offscreen: 0;
+    background-repeat: no-repeat;
+  }
+  
+  .outer section:nth-child(2) {
+    background: url("/img/HomeBild2.png"), #fafcf7;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    
+  }
+  
+  .outer section:nth-child(3) {
+    background: url("/img/HomeBild3.png"), #202A2F;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  
+  .outer section:nth-child(4) {
+    background: url("/img/HomeBild1.png"), #1C1C14;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  }
+  
+  .outer[data-index="2"] section:nth-child(2) {
+    --offscreen: 0;
+  }
+  
+  .outer[data-index="3"] section:nth-child(3) {
+    --offscreen: 0;
+  }
+  
+  .outer[data-index="4"] section:nth-child(4) {
+    --offscreen: 0;
+  }
+  
+  .outer:not([data-index="1"]) section:nth-child(1) {
+    --offscreen: -25%;
+    opacity: 0.75;
+  }
+  .outer:not([data-index="1"]):not([data-index="2"]) section:nth-child(2) {
+    --offscreen: -25%;
+    opacity: 0.75;
+  }
+  .outer:not([data-index="1"]):not([data-index="2"]):not([data-index="3"]) section:nth-child(3) {
+    --offscreen: -25%;
+    opacity: 0.75;
+  }
+  
+  .outer[data-index="2"].mouse_l section:nth-child(1) {
+    --offscreen: calc(-25% + 48px) !important;
+    opacity: 1 !important;
+  }
+  .outer[data-index="2"].mouse_l section:nth-child(2) {
+    --offscreen: 96px;
+  }
+  .outer[data-index="3"].mouse_l section:nth-child(2) {
+    --offscreen: calc(-25% + 48px) !important;
+    opacity: 1 !important;
+  }
+  .outer[data-index="3"].mouse_l section:nth-child(3) {
+    --offscreen: 96px;
+  }
+  .outer[data-index="4"].mouse_l section:nth-child(3) {
+    --offscreen: calc(-25% + 48px) !important;
+    opacity: 1 !important;
+  }
+  .outer[data-index="4"].mouse_l section:nth-child(4) {
+    --offscreen: 96px;
+  }
+  
+  .outer[data-index="1"].mouse_r section:nth-child(1) {
+    --offscreen: -48px;
+  }
+  .outer[data-index="1"].mouse_r section:nth-child(2) {
+    --offscreen: calc(100% - 96px);
+  }
+  .outer[data-index="2"].mouse_r section:nth-child(2) {
+    --offscreen: -48px;
+  }
+  .outer[data-index="2"].mouse_r section:nth-child(3) {
+    --offscreen: calc(100% - 96px);
+  }
+  .outer[data-index="3"].mouse_r section:nth-child(3) {
+    --offscreen: -48px;
+  }
+  .outer[data-index="3"].mouse_r section:nth-child(4) {
+    --offscreen: calc(100% - 96px);
+  }
+  
+  .outer .index {
+    grid-row: 1 / 1;
+    grid-column: 1 / span 3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    position: relative;
+    padding: 0 0 2rem 2rem;
+    margin: 0;
+  }
+  .outer .index h1 {
+    font-weight: 700;
+    font-family: "Unbounded", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    color: #fafafa;
+    font-size: 4rem;
+  }
+  
+  .outer .arrow {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fafafa;
+  }
+  
+  .outer .arrow svg {
+    opacity: 0.5;
+    transition: transform 0.25s, opacity 0.25s;
+  }
+  
+  .outer .arrow#arrow__1 {
+    grid-row: 1 / 1;
+    grid-column: 1 / 1;
+  }
+  .outer:not([data-index="1"]) .arrow#arrow__1 {
+    cursor: pointer;
+  }
+  .outer:not([data-index="1"]) .arrow#arrow__1:hover svg {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  
+  .outer .arrow#arrow__2 {
+    grid-row: 1 / 1;
+    grid-column: 3 / 3;
+  }
+  .outer:not([data-index="4"]) .arrow#arrow__2 {
+    cursor: pointer;
+  }
+  .outer:not([data-index="4"]) .arrow#arrow__2:hover svg {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+/* Schriftzug auf Bild legen */
+
+b {
+    color: red;
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+}
